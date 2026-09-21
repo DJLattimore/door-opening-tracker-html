@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Client-side ORD door opening and late door closing tracker">
+  <title>ORD Door Operations Tracker</title>
+  <link rel="icon" href="assets/logo.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><img src="assets/logo.png" alt="American Airlines"><div><span class="eyebrow">ORD MAINLINE OPERATIONS</span><h1>Door Operations Tracker</h1><p>Seven-day flight review and agent follow-up</p></div></div>
+    <div class="header-actions">
+      <label class="btn primary file-btn">Upload report<input id="reportFile" type="file" accept=".csv,.xlsx,.xls" hidden></label>
+      <button class="btn light" id="exportBtn">Export JSON</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <nav class="tabs" aria-label="Tracker sections">
+      <button class="tab active" data-view="dashboard">Overview</button>
+      <button class="tab" data-view="calendar">Calendar</button>
+      <button class="tab" data-view="closings">Late Door Closings</button>
+      <button class="tab" data-view="employees">Employee Search</button>
+    </nav>
+    <section id="dashboard" class="view active"></section>
+    <section id="calendar" class="view"></section>
+    <section id="closings" class="view"></section>
+    <section id="employees" class="view"></section>
+  </main>
+
+  <div class="modal" id="uploadModal" aria-hidden="true"><div class="modal-card small"><div class="modal-head"><div><span class="eyebrow">IMPORT REPORT</span><h2>Choose report date</h2></div><button class="icon-btn" data-close="uploadModal">×</button></div><form id="uploadForm" class="modal-body"><div class="field"><label for="reportDate">Flight date</label><input id="reportDate" type="date" required></div><p class="hint">The report is stored under this calendar day in this browser and automatically removed after seven days.</p><div class="form-actions"><button type="button" class="btn light" data-close="uploadModal">Cancel</button><button class="btn primary">Import report</button></div></form></div></div>
+
+  <div class="modal" id="recordModal" aria-hidden="true"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">LATE DOOR CLOSING</span><h2 id="recordTitle">Document flight</h2></div><button class="icon-btn" data-close="recordModal">×</button></div><form id="recordForm" class="modal-body form-grid">
+    <input id="recordId" type="hidden">
+    <div class="field"><label>Date *</label><input id="recordDate" type="date" required></div>
+    <div class="field agent-field"><label>Agent *</label><input id="agentSearch" autocomplete="off" placeholder="Search name, email, or employee ID" required><div id="agentResults" class="agent-results"></div><input id="agentId" type="hidden"></div>
+    <div class="field"><label>CSM *</label><input id="recordCsm" readonly required></div>
+    <div class="field"><label>Shift *</label><select id="recordShift" required><option value="">Select shift</option><option>AM 0400-1300</option><option>PM 1300-0000</option></select></div>
+    <div class="field"><label>Flight</label><input id="recordFlight"></div>
+    <div class="field"><label>Gate *</label><input id="recordGate" required></div>
+    <div class="field"><label>Duration *</label><input id="recordDuration" placeholder="Example: 02:15" required></div>
+    <div class="field full"><label>Reason *</label><textarea id="recordReason" rows="3" required></textarea></div>
+    <div class="field full"><label>Corrective action</label><textarea id="recordAction" rows="3"></textarea></div>
+    <div class="field full"><label>Follow-up details</label><textarea id="recordFollowUp" rows="3"></textarea></div>
+    <div class="field full"><label>Pre-positioning notes</label><textarea id="recordPositioning" rows="3"></textarea></div>
+    <div class="form-actions full"><button type="button" class="btn light" data-close="recordModal">Cancel</button><button class="btn primary">Save record</button></div>
+  </form></div></div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <footer>Files and edits stay in this browser. Records older than seven days are removed when the app opens.</footer>
+  <script src="vendor/papaparse.min.js"></script>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
