@@ -12,12 +12,19 @@ The website is already configured with the project URL and publishable key. Comp
 
 This creates the shared data table, an approved-email allowlist, access policies, and daily removal of flight days older than seven calendar days.
 
-## 2. Create approved users
+## 2. Configure account creation
 
-1. Open **Authentication → Users**.
-2. Select **Add user → Create new user**.
-3. Enter the user's email and a temporary password.
-4. Repeat for each approved tracker user.
+1. Open **Authentication → URL Configuration**.
+2. Set the Site URL to `https://djlattimore.github.io/door-opening-tracker-html/`.
+3. Add the same address under Redirect URLs.
+4. Open **Authentication → Providers → Email**.
+5. Keep email registration enabled and keep email confirmation required.
+
+Users can now select **Create account** and register with a verified `@aa.com` address. The database policy automatically grants confirmed `@aa.com` accounts access.
+
+### Optional non-AA administrator or exception
+
+Create the account under **Authentication → Users**, then add its lowercase email to the allowlist:
 
 Then add those same lowercase email addresses to the allowlist. In **SQL Editor**, run:
 
@@ -29,9 +36,7 @@ values
 on conflict (email) do nothing;
 ```
 
-Replace the example addresses with the actual approved login emails.
-
-Finally, open the email provider settings under **Authentication → Providers → Email** and turn off public user registration. The tracker contains no public sign-up form, and the database allowlist provides an additional access check.
+Replace the example addresses with the actual approved exception emails. Accounts outside `@aa.com` cannot access tracker data unless listed here.
 
 ## 3. Deploy
 

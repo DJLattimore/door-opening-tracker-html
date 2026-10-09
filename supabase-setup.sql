@@ -22,11 +22,13 @@ stable
 security definer
 set search_path = ''
 as $$
-  select exists (
-    select 1
-    from public.authorized_users
-    where email = lower(coalesce(auth.jwt() ->> 'email', ''))
-  );
+  select
+    lower(coalesce(auth.jwt() ->> 'email', '')) ~ '^[^@]+@aa[.]com$'
+    or exists (
+      select 1
+      from public.authorized_users
+      where email = lower(coalesce(auth.jwt() ->> 'email', ''))
+    );
 $$;
 
 revoke all on function public.is_tracker_user() from public, anon;

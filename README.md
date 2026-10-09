@@ -11,6 +11,7 @@ Static HTML/CSS/JavaScript application for GitHub Pages with Supabase authentica
 - Add, edit, or delete employee profiles; assigning an agent fills the CSM automatically.
 - Calendar groups each upload under its chosen date.
 - Supabase synchronizes reports, employee edits, assignments, and notes across authenticated devices.
+- Verified `@aa.com` users can create their own accounts; other domains require manual allowlist approval.
 - A scheduled database cleanup keeps the most recent seven calendar days.
 - JSON export for retained flights and follow-up records.
 
