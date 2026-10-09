@@ -9,10 +9,20 @@ function timeSeconds(v){const s=String(v??'').trim();if(!s)return null;if(/^\d+:
 function bodyType(equip){const c=String(equip||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(/777|787|789/.test(c))return{type:'WB',target:210,text:'03:30'};if(/319|320|321|738/.test(c))return{type:'NB',target:150,text:'02:30'};return{type:'Unknown',target:null,text:'N/A'}}
 function calculate(f){const a=bodyType(f.equip),s=timeSeconds(f.opening);return{...f,aircraftType:a.type,target:a.text,openingSeconds:s,metricMet:a.target===null||s===null?null:s<=a.target,lateOpening:a.target!==null&&s!==null&&s>a.target}}
 const docs=()=>({agentId:'',agentName:'',csm:'',shift:'',reason:'',action:'',followUp:'',positioning:''});
-async function boot(){try{employees=JSON.parse(localStorage.getItem(EMP_KEY)||'null')||await fetch('data/employees.json').then(r=>r.json())}catch{employees=[]}try{state={days:{},...JSON.parse(localStorage.getItem(STATE_KEY)||'{}')}}catch{}if(!Object.keys(state.days).length)migrate();cleanup();bind();renderAll()}
+async function boot(){
+  try{employees=JSON.parse(localStorage.getItem(EMP_KEY)||'null')||await fetch('data/employees.json').then(r=>r.json())}catch{employees=[]}
+  try{state={days:{},...JSON.parse(localStorage.getItem(STATE_KEY)||'{}')}}catch{}
+  if(!Object.keys(state.days).length)migrate();cleanup();bind();renderAll();
+  const connected=await Cloud.init({
+    getData:()=>({state,employees}),
+    applyData:data=>{if(data?.state)state={days:{},...data.state};if(Array.isArray(data?.employees))employees=data.employees;localStorage.setItem(STATE_KEY,JSON.stringify(state));localStorage.setItem(EMP_KEY,JSON.stringify(employees));renderAll()}
+  });
+  if(!connected)return;
+  try{const remote=await Cloud.load();if(remote){if(remote.state)state={days:{},...remote.state};if(Array.isArray(remote.employees))employees=remote.employees;localStorage.setItem(STATE_KEY,JSON.stringify(state));localStorage.setItem(EMP_KEY,JSON.stringify(employees));cleanup();renderAll()}else await Cloud.save({state,employees})}catch(error){console.error(error);Cloud.setStatus('Access not ready','error');toast('Complete the database setup and authorize this login email, then refresh.')}
+}
 function migrate(){try{const old=JSON.parse(localStorage.getItem(OLD_KEY)||'{}');if(!old.days)return;state.days=old.days;Object.values(state.days).forEach(d=>d.flights=(d.flights||[]).map(f=>{const r=(old.records||[]).find(x=>x.flightId===f.id)||{};return calculate({...docs(),...f,...r,flightNumber:f.flightNumber||r.flight||'',opening:f.opening||r.duration||''})}))}catch{}}
 function cleanup(){const cut=Date.now()-7*DAY;Object.keys(state.days).forEach(d=>{if(new Date(`${d}T23:59:59`).getTime()<cut)delete state.days[d]});saveState()}
-function saveState(){localStorage.setItem(STATE_KEY,JSON.stringify(state))}function saveEmployees(){localStorage.setItem(EMP_KEY,JSON.stringify(employees))}
+function saveState(){localStorage.setItem(STATE_KEY,JSON.stringify(state));Cloud.queueSave(()=>({state,employees}))}function saveEmployees(){localStorage.setItem(EMP_KEY,JSON.stringify(employees));Cloud.queueSave(()=>({state,employees}))}
 function bind(){document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>switchView(b.dataset.view));document.addEventListener('click',e=>{const c=e.target.closest('[data-close]');if(c)hide(c.dataset.close)});$('reportFile').onchange=e=>{pendingFile=e.target.files[0];if(pendingFile){$('reportDate').value=iso(new Date());show('uploadModal')}};$('uploadForm').onsubmit=importReport;$('recordForm').onsubmit=saveFlight;$('agentSearch').oninput=searchAgents;$('recordEquip').oninput=preview;$('recordDuration').oninput=preview;$('employeeForm').onsubmit=saveEmployee;$('deleteEmployeeBtn').onclick=deleteEmployee;$('exportBtn').onclick=exportData;window.onclick=e=>{if(e.target.classList.contains('modal'))hide(e.target.id)}}
 function switchView(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='calendar')renderCalendar();if(v==='flightWorkspace')renderFlights();if(v==='employees')renderEmployees()}
 function show(id){$(id).classList.add('show')}function hide(id){$(id).classList.remove('show');if(id==='uploadModal'){$('reportFile').value='';pendingFile=null}}function toast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2500)}

@@ -8,13 +8,17 @@
   <link rel="icon" href="assets/logo.png">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/workspace.css">
+  <link rel="stylesheet" href="css/cloud.css">
 </head>
 <body>
   <header class="topbar">
     <div class="brand"><img src="assets/logo.png" alt="American Airlines"><div><span class="eyebrow">ORD MAINLINE OPERATIONS</span><h1>Door Operations Tracker</h1><p>Seven-day flight review and agent follow-up</p></div></div>
     <div class="header-actions">
+      <span class="sync-status" id="syncStatus">Connecting…</span>
+      <button class="btn light" id="syncBtn" type="button">Refresh data</button>
       <label class="btn primary file-btn">Upload report<input id="reportFile" type="file" accept=".csv,.xlsx,.xls" hidden></label>
       <button class="btn light" id="exportBtn">Export JSON</button>
+      <button class="btn light" id="signOutBtn" type="button">Sign out</button>
     </div>
   </header>
 
@@ -67,9 +71,22 @@
   </form></div></div>
 
   <div class="toast" id="toast" role="status"></div>
-  <footer>Files and edits stay in this browser. Records older than seven days are removed when the app opens.</footer>
+  <div class="auth-gate show" id="authGate">
+    <form class="auth-card" id="loginForm">
+      <img src="assets/logo.png" alt="American Airlines">
+      <span class="eyebrow">ORD MAINLINE OPERATIONS</span>
+      <h2>Sign in to the tracker</h2>
+      <p>Use an account created by the tracker administrator.</p>
+      <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" required></div>
+      <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
+      <div class="auth-error" id="loginError"></div>
+      <button class="btn primary" type="submit">Sign in</button>
+    </form>
+  </div>
+  <footer>Authenticated changes are synchronized across devices. Flight days older than seven days are removed automatically.</footer>
   <script src="vendor/papaparse.min.js"></script>
   <script src="vendor/xlsx.full.min.js"></script>
+  <script src="js/cloud.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

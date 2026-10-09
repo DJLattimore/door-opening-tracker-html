@@ -1,6 +1,6 @@
 # ORD Door Operations Tracker
 
-Static HTML/CSS/JavaScript application for GitHub Pages. No React, build command, backend, or database is required.
+Static HTML/CSS/JavaScript application for GitHub Pages with Supabase authentication and shared cross-device storage. No React or build command is required.
 
 ## Features
 
@@ -10,7 +10,8 @@ Static HTML/CSS/JavaScript application for GitHub Pages. No React, build command
 - Edit every imported flight and document the agent, CSM, shift, reason, corrective action, follow-up, and pre-positioning notes.
 - Add, edit, or delete employee profiles; assigning an agent fills the CSM automatically.
 - Calendar groups each upload under its chosen date.
-- Browser storage retains reports and notes for seven days, then removes them when the app next opens.
+- Supabase synchronizes reports, employee edits, assignments, and notes across authenticated devices.
+- A scheduled database cleanup keeps the most recent seven calendar days.
 - JSON export for retained flights and follow-up records.
 
 ## GitHub Pages
@@ -23,6 +24,8 @@ Static HTML/CSS/JavaScript application for GitHub Pages. No React, build command
 
 The site will be available at `https://YOUR-USERNAME.github.io/REPOSITORY-NAME/`.
 
+Before using the deployed site, follow `SUPABASE_SETUP.md` and run `supabase-setup.sql` once in the Supabase SQL Editor.
+
 ## Data and retention
 
-All processing occurs in the browser. Saved reports are specific to that browser and computer; another PC will not see the same saved history. The seven-day cleanup runs when the page is opened or refreshed because this static site has no always-running server.
+Spreadsheet parsing occurs in the browser. Authenticated application data is stored in Supabase and shared across devices. The browser retains a local cache for resilience, while the database remains authoritative after sign-in.
