@@ -10,7 +10,9 @@ The website is already configured with the project URL and publishable key. Comp
 4. Copy all of `supabase-setup.sql` into the editor.
 5. Select **Run**.
 
-This creates the shared data table, an approved-email allowlist, access policies, and daily removal of flight days older than seven calendar days.
+This creates the shared data table, an approved-email allowlist, access policies, and daily removal of flight days older than 14 calendar days. Days marked **Keep** in the app are exempt until manually deleted or unpinned.
+
+If you already ran an older setup, run `supabase-retention-update.sql` once in the SQL Editor to replace the old seven-day cleanup job.
 
 ## 2. Configure account creation
 

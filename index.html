@@ -37,7 +37,7 @@
     <section id="groups" class="view"></section>
   </main>
 
-  <div class="modal" id="uploadModal" aria-hidden="true"><div class="modal-card small"><div class="modal-head"><div><span class="eyebrow">IMPORT REPORT</span><h2>Choose report date</h2></div><button class="icon-btn" data-close="uploadModal">×</button></div><form id="uploadForm" class="modal-body"><div class="field"><label for="reportDate">Flight date</label><input id="reportDate" type="date" required></div><p class="hint">The report is stored under this calendar day in this browser and automatically removed after seven days.</p><div class="form-actions"><button type="button" class="btn light" data-close="uploadModal">Cancel</button><button class="btn primary">Import report</button></div></form></div></div>
+  <div class="modal" id="uploadModal" aria-hidden="true"><div class="modal-card small"><div class="modal-head"><div><span class="eyebrow">IMPORT REPORT</span><h2>Choose report date</h2></div><button class="icon-btn" data-close="uploadModal">×</button></div><form id="uploadForm" class="modal-body"><div class="field"><label for="reportDate">Flight date</label><input id="reportDate" type="date" required></div><p class="hint">The report is stored under this calendar day and automatically removed after 14 days unless you mark it Keep.</p><div class="form-actions"><button type="button" class="btn light" data-close="uploadModal">Cancel</button><button class="btn primary">Import report</button></div></form></div></div>
 
   <div class="modal" id="recordModal" aria-hidden="true"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">FLIGHT RECORD</span><h2 id="recordTitle">Edit flight</h2></div><button class="icon-btn" data-close="recordModal">×</button></div><form id="recordForm" class="modal-body form-grid">
     <input id="recordId" type="hidden">
@@ -64,7 +64,7 @@
     <div class="field"><label>Last name *</label><input id="employeeLast" required></div>
     <div class="field"><label>Employee ID *</label><input id="employeeId" required></div>
     <div class="field"><label>Email</label><input id="employeeEmail" type="email"></div>
-    <div class="field"><label>CSM *</label><input id="employeeCsm" required></div>
+    <div class="field"><label>CSM *</label><input id="employeeCsm" list="csmDirectory" required><datalist id="csmDirectory"></datalist></div>
     <div class="field"><label>CSC Qualified</label><select id="employeeCsc"><option value="">Not listed</option><option>Yes</option><option>No</option></select></div>
     <div class="field"><label>Ante/Post</label><select id="employeeAnte"><option value="">Not listed</option><option>Ante</option><option>Post</option></select></div>
     <div class="field"><label>Anniversary</label><input id="employeeAnniversary" type="date"></div>
@@ -98,7 +98,7 @@
       </form>
     </div>
   </div>
-  <footer>Authenticated changes are synchronized across devices. Flight days older than seven days are removed automatically.</footer>
+  <footer>Authenticated changes are synchronized across devices. Flight days are removed after 14 days unless marked Keep.</footer>
   <script src="vendor/papaparse.min.js"></script>
   <script src="vendor/xlsx.full.min.js"></script>
   <script src="js/cloud.js"></script>

@@ -90,7 +90,8 @@ begin
       (
         select jsonb_object_agg(day_entry.key, day_entry.value)
         from jsonb_each(coalesce(data #> '{state,days}', '{}'::jsonb)) as day_entry
-        where day_entry.key::date >= current_date - 6
+        where day_entry.key::date >= current_date - 13
+           or day_entry.value ->> 'keep' = 'true'
       ),
       '{}'::jsonb
     ),
@@ -104,8 +105,12 @@ revoke all on function public.cleanup_door_tracker() from public, anon, authenti
 
 create extension if not exists pg_cron;
 
+select cron.unschedule(jobid)
+from cron.job
+where jobname in ('door-tracker-seven-day-cleanup', 'door-tracker-fourteen-day-cleanup');
+
 select cron.schedule(
-  'door-tracker-seven-day-cleanup',
+  'door-tracker-fourteen-day-cleanup',
   '15 6 * * *',
   $$ select public.cleanup_door_tracker(); $$
 );

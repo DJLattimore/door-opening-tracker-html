@@ -12,7 +12,8 @@ Static HTML/CSS/JavaScript application for GitHub Pages with Supabase authentica
 - Calendar groups each upload under its chosen date.
 - Supabase synchronizes reports, employee edits, assignments, and notes across authenticated devices.
 - Verified `@aa.com` users can create their own accounts; other domains require manual allowlist approval.
-- A scheduled database cleanup keeps the most recent seven calendar days.
+- A scheduled database cleanup keeps the most recent 14 calendar days.
+- Mark important report days as **Keep** to exempt them from automatic cleanup, or manually delete any uploaded report and all flights from that day.
 - JSON export for retained flights and follow-up records.
 
 ## GitHub Pages
