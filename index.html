@@ -15,7 +15,7 @@
   <header class="site-header">
     <div class="brand-wrap"><img src="assets/logo.png" alt="American Airlines" class="logo"><div><h1>ORD Customer Care</h1><p>Operations &amp; Employee Management</p></div></div>
     <div class="header-controls">
-      <label class="area-picker"><span>Workspace</span><select id="areaSelect"><option value="main">Main Dashboard</option><option value="flights">Flight Operations</option><option value="employees">Employee Management</option></select></label>
+      <label class="area-picker"><span>Workspace</span><select id="areaSelect"><option value="main">Main Dashboard</option><option value="flights">Door Intelligence</option><option value="employees">Employee Management</option></select></label>
       <span class="sync-status" id="syncStatus">Connecting…</span>
       <button class="btn ghost" id="syncBtn" type="button">Refresh</button>
       <button class="btn ghost" id="signOutBtn" type="button">Sign out</button>
@@ -69,6 +69,21 @@
     <div class="field"><label>Ante/Post</label><select id="employeeAnte"><option value="">Not listed</option><option>Ante</option><option>Post</option></select></div>
     <div class="field"><label>Anniversary</label><input id="employeeAnniversary" type="date"></div>
     <div class="field full"><label>Notes</label><textarea id="employeeNotes" rows="4"></textarea></div>
+    <div class="field"><label for="employeeNewHire">New Hire</label><select id="employeeNewHire"><option>No</option><option>Yes</option></select></div>
+    <div class="field" id="probationExpiryField" hidden><label for="employeeProbationExpiry">Probation Expiry</label><input id="employeeProbationExpiry" type="date"></div>
+    <fieldset class="full uniform-section"><legend>Uniform Conversation Tracker</legend><p class="hint">Save changes with the employee profile. Leave unused fields blank.</p><div class="form-grid">
+      <div class="field"><label for="uniformType">Uniform Conversation Type</label><select id="uniformType"><option value="">Select type</option><option>Appearance</option><option>Missing Item</option><option>Incorrect Uniform</option><option>Grooming</option><option>Other</option></select></div>
+      <div class="field"><label for="uniformWorkArea">Work Area</label><select id="uniformWorkArea"><option value="">Select work area</option><option>Lobby</option><option>T5</option><option>Gates</option></select></div>
+      <div class="field"><label for="uniformVerbalIssued">Verbal Issued</label><select id="uniformVerbalIssued"><option value="">Not listed</option><option>Yes</option><option>No</option></select></div>
+      <div class="field"><label for="uniformVerbalDate">Verbal Date</label><input id="uniformVerbalDate" type="date"></div>
+      <div class="field"><label for="uniformDocumentedIssued">Documented Issued</label><select id="uniformDocumentedIssued"><option value="">Not listed</option><option>Yes</option><option>No</option></select></div>
+      <div class="field"><label for="uniformDocumentedDate">Documented Date</label><input id="uniformDocumentedDate" type="date"></div>
+      <div class="field"><label for="uniformEcrNumber">ECR #</label><select id="uniformEcrNumber"><option value="">Select ECR #</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select></div>
+      <div class="field"><label for="uniformEcrDate">ECR Date Issued</label><input id="uniformEcrDate" type="date"></div>
+      <div class="field"><label for="uniformFollowUpDate">Follow-Up Date</label><input id="uniformFollowUpDate" type="date"></div>
+      <div class="field"><label for="uniformStatus">Status</label><select id="uniformStatus"><option value="">Select status</option><option>Open</option><option>Pending Follow-Up</option><option>Resolved</option></select></div>
+      <div class="field full"><label for="uniformNotes">Notes</label><textarea id="uniformNotes" rows="4"></textarea></div>
+    </div></fieldset>
     <div class="form-actions full"><button type="button" class="btn danger" id="deleteEmployeeBtn">Delete</button><button type="button" class="btn light" data-close="employeeModal">Cancel</button><button class="btn primary">Save employee</button></div>
   </form></div></div>
 
@@ -102,6 +117,7 @@
   <script src="vendor/papaparse.min.js"></script>
   <script src="vendor/xlsx.full.min.js"></script>
   <script src="js/cloud.js"></script>
+  <script src="js/employee-enhancements.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

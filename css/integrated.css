@@ -1,5 +1,6 @@
 :root{--red:#c90000;--red-dark:#a90000;--ink:#202124;--muted:#667085;--line:#e4e7ec;--bg:#f4f6f8;--white:#fff;--soft:#f9fafb;--green:#16794a;--amber:#9a4d00;--shadow:0 8px 28px rgba(16,24,40,.08);--navy:#202124;--gold:#c90000}
 html{scroll-behavior:smooth}
+[hidden]{display:none!important}.uniform-section{min-width:0;border:1px solid var(--line);border-radius:12px;padding:16px;margin:8px 0}.uniform-section legend{padding:0 8px;font-weight:850;font-size:18px}.uniform-section>p{margin:0 0 14px}
 body{background:var(--bg);color:var(--ink)}
 .site-header{background:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:15px max(22px,calc((100vw - 1250px)/2));border-bottom:1px solid var(--line)}
 .brand-wrap{display:flex;align-items:center;gap:15px}.logo{width:70px;height:70px;object-fit:contain}.brand-wrap h1{margin:0;font-size:23px}.brand-wrap p{margin:3px 0 0;color:var(--muted);font-size:13px}
