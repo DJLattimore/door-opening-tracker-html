@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Client-side ORD door opening and late door closing tracker">
-  <title>ORD Door Operations Tracker</title>
+  <title>ORD CSM Customer Care</title>
   <link rel="icon" href="assets/logo.png">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/workspace.css">
@@ -13,7 +13,7 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="brand-wrap"><img src="assets/logo.png" alt="American Airlines" class="logo"><div><h1>ORD Customer Care</h1><p>Operations &amp; Employee Management</p></div></div>
+    <div class="brand-wrap"><img src="assets/logo.png" alt="American Airlines" class="logo"><div><h1>ORD CSM Customer Care</h1><p>Operations &amp; Employee Management</p></div></div>
     <div class="header-controls">
       <label class="area-picker"><span>Workspace</span><select id="areaSelect"><option value="main">Main Dashboard</option><option value="flights">Door Intelligence</option><option value="employees">Employee Management</option></select></label>
       <span class="sync-status" id="syncStatus">Connecting…</span>
@@ -91,15 +91,33 @@
   <div class="auth-gate show" id="authGate">
     <div class="auth-card">
       <img src="assets/logo.png" alt="American Airlines">
-      <span class="eyebrow">ORD MAINLINE OPERATIONS</span>
+      <span class="eyebrow">ORD CSM CUSTOMER CARE</span>
       <div class="auth-modes"><button class="auth-mode active" id="loginModeBtn" type="button">Sign in</button><button class="auth-mode" id="signupModeBtn" type="button">Create account</button></div>
       <form id="loginForm">
-        <h2>Sign in to the tracker</h2>
+        <h2>Sign in to ORD CSM Customer Care</h2>
         <p>Use your approved account.</p>
         <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" required></div>
         <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
         <div class="auth-error" id="loginError"></div>
         <button class="btn primary" type="submit">Sign in</button>
+        <button class="btn light" id="forgotPasswordBtn" type="button">Forgot password?</button>
+      </form>
+      <form id="forgotPasswordForm" hidden>
+        <h2>Reset your password</h2>
+        <p>Enter the email you use to sign in.</p>
+        <div class="field"><label for="resetEmail">Email</label><input id="resetEmail" type="email" autocomplete="email" required></div>
+        <div class="auth-error" id="resetError" role="alert"></div>
+        <div class="auth-success" id="resetSuccess" role="status"></div>
+        <button class="btn primary" type="submit">Send reset link</button>
+        <button class="btn light" id="resetBackBtn" type="button">Back to sign in</button>
+      </form>
+      <form id="newPasswordForm" hidden>
+        <h2>Choose a new password</h2>
+        <div class="field"><label for="newPassword">New password</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+        <div class="field"><label for="newPasswordConfirm">Confirm new password</label><input id="newPasswordConfirm" type="password" autocomplete="new-password" minlength="8" required></div>
+        <div class="auth-error" id="newPasswordError" role="alert"></div>
+        <button class="btn primary" type="submit">Update password</button>
+        <button class="btn light" id="cancelRecoveryBtn" type="button">Back to sign in</button>
       </form>
       <form id="signupForm" hidden>
         <h2>Create your account</h2>

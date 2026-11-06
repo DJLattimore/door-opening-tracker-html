@@ -26,11 +26,61 @@ const Cloud=(()=>{
   async function pull(force=false){if(!session)return;try{status('Syncing…');const rows=await request('/rest/v1/app_state?id=eq.shared&select=data,updated_at');if(!rows?.length){await save(getData());return}const remoteTime=rows[0].updated_at||'';if(force||!lastUpdated||remoteTime>lastUpdated){lastUpdated=remoteTime;applyData(rows[0].data)}status('Saved','saved')}catch(error){console.error(error);status('Sync failed','error')}}
   async function init(options){
     getData=options.getData;applyData=options.applyData;
-    const setMode=mode=>{const login=mode==='login';el('loginForm').hidden=!login;el('signupForm').hidden=login;el('loginModeBtn').classList.toggle('active',login);el('signupModeBtn').classList.toggle('active',!login);el('loginError').textContent='';el('signupError').textContent='';el('signupSuccess').textContent=''};
+    const setMode=mode=>{
+      for(const [key,id] of Object.entries({login:'loginForm',signup:'signupForm',forgot:'forgotPasswordForm',recovery:'newPasswordForm'}))el(id).hidden=key!==mode;
+      el('loginModeBtn').classList.toggle('active',mode==='login');
+      el('signupModeBtn').classList.toggle('active',mode==='signup');
+      el('loginModeBtn').disabled=el('signupModeBtn').disabled=mode==='recovery';
+      for(const id of ['loginError','signupError','signupSuccess','resetError','resetSuccess','newPasswordError'])el(id).textContent='';
+    };
+    const fragment=new URLSearchParams(location.hash.slice(1));
+    const query=new URLSearchParams(location.search);
+    let recoveryToken=fragment.get('type')==='recovery'?fragment.get('access_token'):null;
+    const linkError=fragment.has('error_code')||query.has('error_code')||fragment.get('type')==='recovery';
+    if(recoveryToken||linkError){
+      history.replaceState(null,'',location.pathname);
+      saveSession(null);
+    }
+    el('forgotPasswordBtn').onclick=()=>{setMode('forgot');el('resetEmail').value=el('loginEmail').value;el('resetEmail').focus()};
+    el('resetBackBtn').onclick=()=>setMode('login');
+    el('cancelRecoveryBtn').onclick=()=>{recoveryToken=null;el('newPasswordForm').reset();setMode('login')};
+    el('forgotPasswordForm').addEventListener('submit',async event=>{
+      event.preventDefault();
+      const button=event.submitter;
+      const email=el('resetEmail').value.trim().toLowerCase();
+      const redirect=encodeURIComponent(location.origin+location.pathname);
+      el('resetError').textContent=el('resetSuccess').textContent='';
+      button.disabled=true;
+      try{
+        await request('/auth/v1/recover?redirect_to='+redirect,{method:'POST',authenticated:false,body:{email}});
+        el('resetSuccess').textContent='If this account can receive a reset email, check your inbox for the link.';
+      }catch(error){
+        el('resetError').textContent=error.status===429?'Too many requests. Wait a few minutes before trying again.':'Could not send a reset link. Try again later or contact the tracker administrator.';
+      }finally{button.disabled=false}
+    });
+    el('newPasswordForm').addEventListener('submit',async event=>{
+      event.preventDefault();
+      const button=event.submitter,password=el('newPassword').value;
+      if(!recoveryToken)return;
+      if(password.length<8||password!==el('newPasswordConfirm').value){el('newPasswordError').textContent='Use at least 8 characters and enter the same password twice.';return}
+      button.disabled=el('cancelRecoveryBtn').disabled=true;
+      el('newPasswordError').textContent='';
+      try{
+        await request('/auth/v1/user',{method:'PUT',authenticated:false,headers:{Authorization:'Bearer '+recoveryToken},body:{password}});
+        recoveryToken=null;
+        el('newPasswordForm').reset();
+        setMode('login');
+        showLogin('Password updated. Sign in with your new password.');
+      }catch(error){
+        el('newPasswordError').textContent=error.status===401||error.status===403?'This reset link is invalid or expired. Request a new one.':(error.message||'Could not update the password.');
+      }finally{button.disabled=el('cancelRecoveryBtn').disabled=false}
+    });
     el('loginModeBtn').onclick=()=>setMode('login');el('signupModeBtn').onclick=()=>setMode('signup');
     el('loginForm').addEventListener('submit',async event=>{event.preventDefault();const button=event.submitter;button.disabled=true;el('loginError').textContent='';try{await signIn(el('loginEmail').value.trim().toLowerCase(),el('loginPassword').value);location.reload()}catch(error){el('loginError').textContent=error.message;button.disabled=false}});
     el('signupForm').addEventListener('submit',async event=>{event.preventDefault();const email=el('signupEmail').value.trim().toLowerCase(),password=el('signupPassword').value,confirm=el('signupConfirm').value,button=event.submitter;el('signupError').textContent='';el('signupSuccess').textContent='';if(!/^[^@\s]+@aa\.com$/.test(email)){el('signupError').textContent='Use a valid @aa.com email address.';return}if(password!==confirm){el('signupError').textContent='The passwords do not match.';return}button.disabled=true;try{const data=await signUp(email,password);if(data?.access_token){saveSession(data);location.reload();return}el('signupSuccess').textContent='Account created. Check your @aa.com inbox and select the confirmation link, then return here to sign in.';el('signupPassword').value='';el('signupConfirm').value=''}catch(error){el('signupError').textContent=error.message}finally{button.disabled=false}});
     el('signOutBtn').onclick=()=>{saveSession(null);location.reload()};el('syncBtn').onclick=()=>pull(true);
+    if(recoveryToken){setMode('recovery');showLogin();el('newPassword').focus();return false}
+    if(linkError){setMode('login');showLogin('This email link is invalid or expired. Request a new link.');return false}
     if(!await ensureSession()){showLogin();return false}hideLogin();status('Syncing…');pollTimer=setInterval(()=>{if(!document.querySelector('.modal.show'))pull(false)},30000);return true
   }
   function stop(){clearInterval(pollTimer);clearTimeout(saveTimer)}
