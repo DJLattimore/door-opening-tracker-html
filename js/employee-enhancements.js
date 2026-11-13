@@ -18,6 +18,7 @@ function updateProbationVisibility(){
   $('employeeProbationExpiry').disabled=!enabled;
 }
 function fillEmployeeEnhancements(employee){
+  $('employeeDoorMissCount').value=employee.doorMissCount||'';
   $('employeeNewHire').value=employee.newHire==='Yes'?'Yes':'No';
   $('employeeProbationExpiry').value=employee.probationExpiry||'';
   $('employeeNewHire').onchange=updateProbationVisibility;
@@ -27,5 +28,5 @@ function fillEmployeeEnhancements(employee){
 function readEmployeeEnhancements(existing={}){
   const uniformConversation={...existing.uniformConversation};
   for(const [key,id] of Object.entries(UNIFORM_FIELDS))uniformConversation[key]=$(id).value.trim();
-  return {newHire:$('employeeNewHire').value,probationExpiry:$('employeeNewHire').value==='Yes'?$('employeeProbationExpiry').value:(existing.probationExpiry||''),uniformConversation,csmTeamUpdate:CSM_TEAM_UPDATE};
+  return {doorMissCount:$('employeeDoorMissCount').value?Number($('employeeDoorMissCount').value):null,newHire:$('employeeNewHire').value,probationExpiry:$('employeeNewHire').value==='Yes'?$('employeeProbationExpiry').value:(existing.probationExpiry||''),uniformConversation,csmTeamUpdate:CSM_TEAM_UPDATE};
 }
