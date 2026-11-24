@@ -10,12 +10,13 @@
   <link rel="stylesheet" href="css/workspace.css">
   <link rel="stylesheet" href="css/cloud.css">
   <link rel="stylesheet" href="css/integrated.css">
+  <link rel="stylesheet" href="css/surprise-delight.css">
 </head>
 <body>
   <header class="site-header">
     <div class="brand-wrap"><img src="assets/logo.png" alt="American Airlines" class="logo"><div><h1>ORD CSM Customer Care</h1><p>Operations &amp; Employee Management</p></div></div>
     <div class="header-controls">
-      <label class="area-picker"><span>Workspace</span><select id="areaSelect"><option value="main">Main Dashboard</option><option value="flights">Door Intelligence</option><option value="employees">Employee Management</option></select></label>
+      <label class="area-picker"><span>Workspace</span><select id="areaSelect"><option value="main">Main Dashboard</option><option value="flights">Door Intelligence</option><option value="employees">Employee Management</option><option value="surprise">Surprise &amp; Delight</option></select></label>
       <span class="sync-status" id="syncStatus">Connecting…</span>
       <button class="btn ghost" id="syncBtn" type="button">Refresh</button>
       <button class="btn ghost" id="signOutBtn" type="button">Sign out</button>
@@ -38,6 +39,10 @@
     <section id="employeeSummary" class="view"></section>
     <section id="employees" class="view"></section>
     <section id="groups" class="view"></section>
+    <section id="sdOverview" class="view"></section>
+    <section id="sdTravelers" class="view"></section>
+    <section id="sdMissed" class="view"></section>
+    <section id="sdUpload" class="view"></section>
   </main>
 
   <div class="modal" id="uploadModal" aria-hidden="true"><div class="modal-card small"><div class="modal-head"><div><span class="eyebrow">IMPORT REPORT</span><h2>Choose report date</h2></div><button class="icon-btn" data-close="uploadModal">×</button></div><form id="uploadForm" class="modal-body"><div class="field"><label for="reportDate">Flight date</label><input id="reportDate" type="date" required></div><p class="hint">The report is stored under this calendar day and automatically removed after 14 days unless you mark it Keep.</p><div class="form-actions"><button type="button" class="btn light" data-close="uploadModal">Cancel</button><button class="btn primary">Import report</button></div></form></div></div>
@@ -142,6 +147,7 @@
   <script src="js/cloud.js"></script>
   <script src="js/employee-enhancements.js"></script>
   <script src="js/door-performance.js"></script>
+  <script src="js/surprise-delight.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
